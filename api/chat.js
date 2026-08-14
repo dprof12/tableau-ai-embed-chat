@@ -68,6 +68,7 @@ export default async function handler(req, res) {
     const rows = body.rows;
     const message = body.message;
     const chatHistory = Array.isArray(body.chatHistory) ? body.chatHistory : [];
+    const activeFilters = Array.isArray(body.activeFilters) ? body.activeFilters : [];
 
     if (!message || message.trim() === '') {
       return res.status(400).json({
@@ -114,6 +115,12 @@ export default async function handler(req, res) {
       });
     }
 
+    // Format active filters
+    let filtersText = '';
+    if (activeFilters && activeFilters.length > 0) {
+      filtersText = `FILTER DASHBOARD YANG SEDANG AKTIF (Data di bawah ini sudah tersaring oleh filter berikut):\n` + activeFilters.map(f => `- ${f}`).join('\n') + `\n\n`;
+    }
+
     // 4. Construct System Prompt
     const systemPrompt = `Anda adalah Data Assistant Chatbot untuk dashboard Tableau '${dashboardName}'. Tugas Anda adalah menjawab pertanyaan user secara interaktif dan spesifik HANYA berdasarkan data dashboard yang disediakan berikut.
 
@@ -130,7 +137,7 @@ ATURAN UTAMA:
 10. Patuhi filter yang aktif pada tabel data. Jika ada kolom kategori filter (seperti Desil atau Tahun) dan nilainya disaring (misal Penerima atau Desil 1), gunakan angka yang sesuai dengan filter aktif tersebut.
 11. JANGAN PERNAH mendaftar atau menjelaskan daftar filter yang tersedia (seperti Kategori Desil, Kategori Usia, Kepemilikan Aset, dsb.) atau menuliskan catatan teknis tentang nama tabel/sheet (seperti Tombol 2, Tombol 3, Sheet 72) di dalam ringkasan Anda. Fokuslah HANYA untuk menyajikan ringkasan angka data riil, perbandingan data utama, dan insight bisnis/korelasinya.
 
-DATASET DASHBOARD:
+${filtersText}DATASET DASHBOARD:
 ${formattedDataText}`;
 
     let replyText = '';

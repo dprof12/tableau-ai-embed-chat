@@ -144,9 +144,11 @@ async function triggerSyncData() {
 
     if (state.isTableauEnvironment && state.dashboard) {
       const combinedSheetsData = [];
+      const filterStrings = [];
 
       for (const ws of state.availableWorksheets) {
         try {
+          // Extract data
           const summaryData = await ws.getSummaryDataAsync({ maxRows: 100 });
           const columns = summaryData.columns.map(c => c.fieldName);
           const rows = summaryData.data.map(row => {
@@ -158,8 +160,20 @@ async function triggerSyncData() {
             columns: columns,
             rows: rows
           });
+
+          // Extract active filters on this worksheet
+          const wsFilters = await ws.getFiltersAsync();
+          wsFilters.forEach(f => {
+            if (f.appliedValues && f.appliedValues.length > 0) {
+              const vals = f.appliedValues.map(v => v.formattedValue || v.value);
+              // Ignore if it filters to "All" (which usually lists all values or has a high length)
+              if (vals.length > 0 && vals.length < 5) {
+                filterStrings.push(`${f.fieldName}: ${vals.join(', ')}`);
+              }
+            }
+          });
         } catch (err) {
-          console.warn(`Gagal mengambil summary data dari worksheet ${ws.name}:`, err);
+          console.warn(`Gagal mengambil data/filter dari worksheet ${ws.name}:`, err);
         }
       }
 
@@ -181,9 +195,13 @@ async function triggerSyncData() {
         dashboardName = 'Jumlah Penumpang Angkutan Umum yang Terlayani';
       }
 
+      // Remove duplicate filter entries
+      const uniqueFilters = [...new Set(filterStrings)];
+
       payload = {
         dashboardName: dashboardName,
-        sheetsData: combinedSheetsData
+        sheetsData: combinedSheetsData,
+        activeFilters: uniqueFilters
       };
     } else {
       payload = getDemoPayload();
@@ -214,9 +232,10 @@ function sendDataToParent(payload) {
     window.top.postMessage({
       type: 'TABLEAU_DATA_SYNC',
       dashboardName: payload.dashboardName,
-      sheetsData: payload.sheetsData
+      sheetsData: payload.sheetsData,
+      activeFilters: payload.activeFilters || []
     }, '*');
-    console.log('Payload data berhasil di-broadcast ke website induk (window.top).');
+    console.log('Payload data berhasil di-broadcast ke website induk (window.top) beserta filter aktif.');
   } else {
     console.log('Ekstensi tidak berjalan di dalam iframe. Sinyal TABLEAU_DATA_SYNC dicetak ke konsol:', payload);
   }

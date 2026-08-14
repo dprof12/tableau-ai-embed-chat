@@ -51,7 +51,8 @@ window.addEventListener('message', (event) => {
 
     state.currentDashboardData = {
       dashboardName: elements.currentVizTitle.textContent,
-      sheetsData: data.sheetsData
+      sheetsData: data.sheetsData,
+      activeFilters: data.activeFilters || []
     };
 
     // Update Connection Status UI
@@ -160,6 +161,7 @@ async function handleUserMessageSubmit() {
     const payload = {
       dashboardName: state.currentDashboardData.dashboardName,
       sheetsData: state.currentDashboardData.sheetsData,
+      activeFilters: state.currentDashboardData.activeFilters || [],
       message: query,
       chatHistory: state.chatHistory
     };
