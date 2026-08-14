@@ -79,11 +79,11 @@ function attachParentEventListeners() {
     setConnectingState();
   });
 
-  // Navigation Dashboard B (Retail Sales)
+  // Navigation Dashboard B (Dashboard Lainnya)
   elements.btnDashB.addEventListener('click', () => {
     setActiveNavButton(elements.btnDashB);
-    elements.currentVizTitle.textContent = 'Dashboard Retail (Simulasi B)';
-    elements.tableauIframe.src = 'ui.html?sim=retail';
+    elements.currentVizTitle.textContent = 'Dashboard Lainnya';
+    elements.tableauIframe.src = 'https://analytic.jakarta.go.id/views/DashboardPerhubungantesAI/12_1_1_33?:embed=y&:showVizHome=no&:toolbar=no';
     elements.realIframeUrl.value = '';
     setConnectingState();
   });
