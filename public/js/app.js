@@ -168,8 +168,16 @@ async function triggerSyncData() {
       }
 
       let dashboardName = state.dashboard.name || 'Dashboard Tableau';
-      // Clean up numeric codes like '12.1.1.1' to descriptive titles
-      if (/^\d+(\.\d+)+/.test(dashboardName)) {
+      
+      // Bersihkan nama kode numerik (seperti 12.1.1.12 atau 12.1.1.33) menjadi judul deskriptif yang sesuai
+      const normalizedName = dashboardName.trim().replace(/_/g, '.');
+      
+      if (normalizedName.includes('12.1.1.33')) {
+        dashboardName = 'Jumlah Penumpang Angkutan Umum Berbasis Perairan';
+      } else if (normalizedName.includes('12.1.1.12') || normalizedName.includes('12.1.1.1')) {
+        dashboardName = 'Jumlah Penumpang Angkutan Umum yang Terlayani';
+      } else if (/^\d+([\._]\d+)+/.test(normalizedName)) {
+        // Fallback default
         dashboardName = 'Jumlah Penumpang Angkutan Umum yang Terlayani';
       }
 

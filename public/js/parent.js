@@ -73,7 +73,7 @@ function attachParentEventListeners() {
   // Navigation Dashboard A (Passenger)
   elements.btnDashA.addEventListener('click', () => {
     setActiveNavButton(elements.btnDashA);
-    elements.currentVizTitle.textContent = 'Dashboard Penumpang';
+    elements.currentVizTitle.textContent = 'Jumlah Penumpang Angkutan Umum yang Terlayani';
     elements.tableauIframe.src = 'https://analytic.jakarta.go.id/views/DashboardPerhubungantesAI/12_1_1_12?:embed=y&:showVizHome=no&:toolbar=no';
     elements.realIframeUrl.value = '';
     
@@ -86,7 +86,7 @@ function attachParentEventListeners() {
   // Navigation Dashboard B (Dashboard Lainnya)
   elements.btnDashB.addEventListener('click', () => {
     setActiveNavButton(elements.btnDashB);
-    elements.currentVizTitle.textContent = 'Dashboard Lainnya';
+    elements.currentVizTitle.textContent = 'Jumlah Penumpang Angkutan Umum Berbasis Perairan';
     elements.tableauIframe.src = 'https://analytic.jakarta.go.id/views/DashboardPerhubungantesAI/12_1_1_33?:embed=y&:showVizHome=no&:toolbar=no';
     elements.realIframeUrl.value = '';
     
