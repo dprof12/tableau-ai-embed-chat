@@ -14,8 +14,25 @@ export default async function handler(req, res) {
     'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization'
   );
 
+  // Polyfill helper methods jika tidak di-inject oleh runtime Vercel (untuk compatibility ESM)
+  if (typeof res.status !== 'function') {
+    res.status = function (statusCode) {
+      this.statusCode = statusCode;
+      return this;
+    };
+  }
+  if (typeof res.json !== 'function') {
+    res.json = function (data) {
+      this.setHeader('Content-Type', 'application/json');
+      this.end(JSON.stringify(data));
+      return this;
+    };
+  }
+
   if (req.method === 'OPTIONS') {
-    return res.status(200).end();
+    res.statusCode = 200;
+    res.end();
+    return;
   }
 
   if (req.method !== 'POST') {
