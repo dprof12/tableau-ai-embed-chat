@@ -31,8 +31,20 @@ document.addEventListener('DOMContentLoaded', () => {
  * 1. Initialize Tableau Extensions SDK
  */
 function initTableauExtension() {
+  let initialized = false;
+
+  // Set timeout 2 detik untuk fallback ke mode preview jika Tableau SDK tidak merespon (karena dijalankan di luar Tableau)
+  const timeoutId = setTimeout(() => {
+    if (!initialized) {
+      console.log('Tableau SDK tidak merespon dalam 2 detik. Mengaktifkan Mode Preview Browser.');
+      setupBrowserPreviewMode();
+    }
+  }, 2000);
+
   if (typeof tableau !== 'undefined' && tableau.extensions && tableau.extensions.initializeAsync) {
     tableau.extensions.initializeAsync().then(() => {
+      initialized = true;
+      clearTimeout(timeoutId);
       state.isTableauEnvironment = true;
       state.dashboard = tableau.extensions.dashboardContent.dashboard;
       state.availableWorksheets = state.dashboard.worksheets || [];
@@ -50,10 +62,13 @@ function initTableauExtension() {
       triggerSyncData();
 
     }).catch((err) => {
+      initialized = true;
+      clearTimeout(timeoutId);
       console.error('Tableau initializeAsync error:', err);
       setupBrowserPreviewMode();
     });
   } else {
+    clearTimeout(timeoutId);
     setupBrowserPreviewMode();
   }
 }
