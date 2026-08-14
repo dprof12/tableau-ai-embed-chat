@@ -202,13 +202,13 @@ async function triggerSyncData() {
  * 5. Send PostMessage to Parent Window
  */
 function sendDataToParent(payload) {
-  if (window.parent !== window) {
-    window.parent.postMessage({
+  if (window.top !== window) {
+    window.top.postMessage({
       type: 'TABLEAU_DATA_SYNC',
       dashboardName: payload.dashboardName,
       sheetsData: payload.sheetsData
     }, '*');
-    console.log('Payload data berhasil di-broadcast ke website induk.');
+    console.log('Payload data berhasil di-broadcast ke website induk (window.top).');
   } else {
     console.log('Ekstensi tidak berjalan di dalam iframe. Sinyal TABLEAU_DATA_SYNC dicetak ke konsol:', payload);
   }
