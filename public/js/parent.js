@@ -73,8 +73,8 @@ function attachParentEventListeners() {
   // Navigation Dashboard A (Passenger)
   elements.btnDashA.addEventListener('click', () => {
     setActiveNavButton(elements.btnDashA);
-    elements.currentVizTitle.textContent = 'Dashboard Penumpang (Simulasi A)';
-    elements.tableauIframe.src = 'ui.html?sim=passenger';
+    elements.currentVizTitle.textContent = 'Dashboard Penumpang';
+    elements.tableauIframe.src = 'https://analytic.jakarta.go.id/views/DashboardPerhubungantesAI/12_1_1_12?:embed=y&:showVizHome=no&:toolbar=no';
     elements.realIframeUrl.value = '';
     setConnectingState();
   });

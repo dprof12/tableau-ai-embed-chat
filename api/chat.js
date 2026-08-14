@@ -26,14 +26,13 @@ export default async function handler(req, res) {
   }
 
   try {
-    const {
-      dashboardName = 'Dashboard Tableau',
-      sheetsData = [],
-      columns,
-      rows,
-      message,
-      chatHistory = []
-    } = req.body || {};
+    const body = req.body || {};
+    const dashboardName = body.dashboardName || 'Dashboard Tableau';
+    const sheetsData = Array.isArray(body.sheetsData) ? body.sheetsData : [];
+    const columns = body.columns;
+    const rows = body.rows;
+    const message = body.message;
+    const chatHistory = Array.isArray(body.chatHistory) ? body.chatHistory : [];
 
     if (!message || message.trim() === '') {
       return res.status(400).json({
@@ -95,8 +94,8 @@ ${formattedDataText}`;
       const messages = [
         { role: 'system', content: systemPrompt },
         ...chatHistory.map(h => ({
-          role: h.role === 'model' ? 'assistant' : 'user',
-          content: h.content
+          role: h && h.role === 'model' ? 'assistant' : 'user',
+          content: (h && h.content) || ''
         })),
         { role: 'user', content: message }
       ];
@@ -119,10 +118,10 @@ ${formattedDataText}`;
 
       // Filter and format chat history to only keep 'user' and 'model' roles
       const formattedHistory = chatHistory
-        .filter(h => h.role === 'user' || h.role === 'model')
+        .filter(h => h && (h.role === 'user' || h.role === 'model'))
         .map(h => ({
           role: h.role,
-          parts: [{ text: h.content }]
+          parts: [{ text: h.content || '' }]
         }));
 
       const chat = model.startChat({
