@@ -43,7 +43,25 @@ export default async function handler(req, res) {
   }
 
   try {
-    const body = req.body || {};
+    // Parse JSON body secara manual jika req.body tidak disediakan (untuk compatibility ESM di Vercel)
+    let body = {};
+    if (req.body) {
+      body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+    } else {
+      const buffers = [];
+      for await (const chunk of req) {
+        buffers.push(chunk);
+      }
+      const rawBody = Buffer.concat(buffers).toString();
+      if (rawBody) {
+        try {
+          body = JSON.parse(rawBody);
+        } catch (e) {
+          console.error('Gagal melakukan parse JSON body secara manual:', e);
+        }
+      }
+    }
+
     const dashboardName = body.dashboardName || 'Dashboard Tableau';
     const sheetsData = Array.isArray(body.sheetsData) ? body.sheetsData : [];
     const columns = body.columns;
