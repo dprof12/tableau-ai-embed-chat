@@ -43,21 +43,21 @@ window.addEventListener('message', (event) => {
     console.log('Synchronized payload received from Tableau:', data);
 
     // Detect if this is a new dashboard context to clean old chat sessions
-    if (!state.currentDashboardData || state.currentDashboardData.dashboardName !== data.dashboardName) {
+    if (!state.currentDashboardData) {
       resetChatHistory();
-      appendBotMessage(`🟢 **Koneksi Sukses**: Berhasil terhubung ke dataset **${data.dashboardName}**.`);
+      appendBotMessage(`🟢 **Koneksi Sukses**: Berhasil terhubung ke **${elements.currentVizTitle.textContent}**.`);
       appendBotMessage("Data terbaru telah disinkronisasikan ke portal ini secara real-time. Silakan ajukan pertanyaan Anda!");
     }
 
     state.currentDashboardData = {
-      dashboardName: data.dashboardName,
+      dashboardName: elements.currentVizTitle.textContent,
       sheetsData: data.sheetsData
     };
 
     // Update Connection Status UI
     const dot = elements.connectionStatus.querySelector('.status-indicator-dot');
     dot.className = 'status-indicator-dot green';
-    elements.connectionStatus.querySelector('.status-label-text').innerHTML = `🟢 Terkoneksi: <strong>${data.dashboardName}</strong>`;
+    elements.connectionStatus.querySelector('.status-label-text').innerHTML = `🟢 Terkoneksi: <strong>${elements.currentVizTitle.textContent}</strong>`;
 
     // Enable chat form controls
     elements.chatInput.disabled = false;
@@ -76,6 +76,10 @@ function attachParentEventListeners() {
     elements.currentVizTitle.textContent = 'Dashboard Penumpang';
     elements.tableauIframe.src = 'https://analytic.jakarta.go.id/views/DashboardPerhubungantesAI/12_1_1_12?:embed=y&:showVizHome=no&:toolbar=no';
     elements.realIframeUrl.value = '';
+    
+    // Force reset chat and clear state immediately on navigation
+    resetChatHistory();
+    state.currentDashboardData = null;
     setConnectingState();
   });
 
@@ -85,6 +89,10 @@ function attachParentEventListeners() {
     elements.currentVizTitle.textContent = 'Dashboard Lainnya';
     elements.tableauIframe.src = 'https://analytic.jakarta.go.id/views/DashboardPerhubungantesAI/12_1_1_33?:embed=y&:showVizHome=no&:toolbar=no';
     elements.realIframeUrl.value = '';
+    
+    // Force reset chat and clear state immediately on navigation
+    resetChatHistory();
+    state.currentDashboardData = null;
     setConnectingState();
   });
 
@@ -95,6 +103,10 @@ function attachParentEventListeners() {
       setActiveNavButton(null);
       elements.currentVizTitle.textContent = 'Dashboard Tableau Riil';
       elements.tableauIframe.src = url;
+      
+      // Force reset chat and clear state immediately on navigation
+      resetChatHistory();
+      state.currentDashboardData = null;
       setConnectingState();
     }
   });
