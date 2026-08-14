@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Po'tata Sync Panel</title>
+  
+  <!-- Google Fonts: Inter & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2 family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Tableau Extensions JS SDK -->
+  <script src="js/tableau.extensions.1.latest.js"></script>
+</head>
+<body>
+  <div class="sync-panel-container">
+    <div class="sync-card">
+      <div class="sync-header">
+        <span class="status-dot pulsing"></span>
+        <h4 class="sync-title">Po'tata Data Sync</h4>
+      </div>
+      <div class="sync-body">
+        <p class="sync-status-text" id="statusText">Menghubungkan ke Tableau...</p>
+        <div class="sync-details hidden" id="syncDetails">
+          <div class="detail-row">
+            <span class="detail-label">Dashboard:</span>
+            <span class="detail-val" id="dbName">-</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Total Sheet:</span>
+            <span class="detail-val" id="sheetCount">-</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Last Sync:</span>
+            <span class="detail-val" id="lastSyncTime">-</span>
+          </div>
+        </div>
+      </div>
+      <div class="sync-footer">
+        <span>Headless Bridge Mode</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Extension Logic -->
+  <script src="js/app.js"></script>
+</body>
+</html>

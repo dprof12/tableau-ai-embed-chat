@@ -1,0 +1,30 @@
+{
+  "name": "tableau-ai-embed-chat",
+  "version": "1.0.0",
+  "description": "Tableau Decoupled Dashboard Extension for Real-time Data Sync & Parent Chatbot",
+  "main": "api/chat.js",
+  "type": "module",
+  "scripts": {
+    "dev": "node server.js",
+    "test-chat": "node test/test-chat.js"
+  },
+  "keywords": [
+    "tableau",
+    "tableau-extension",
+    "ai",
+    "chatbot",
+    "postmessage",
+    "gemini",
+    "openai",
+    "vercel"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@google/generative-ai": "^0.24.0",
+    "openai": "^4.86.0"
+  },
+  "devDependencies": {
+    "dotenv": "^16.4.7"
+  }
+}

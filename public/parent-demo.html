@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BI Portal - Portal Dashboard Perhubungan & Chatbot Po'tata</title>
+  
+  <!-- Google Fonts: Inter & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/parent-style.css">
+  
+  <!-- Marked.js for markdown rendering -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+  <div class="portal-app">
+    
+    <!-- Top Navigation Bar -->
+    <nav class="portal-navbar">
+      <div class="navbar-logo-section">
+        <div class="portal-logo"></div>
+        <h1 class="portal-title">Executive Analytics Portal</h1>
+      </div>
+      <div class="navbar-menu">
+        <button class="nav-item active" id="btnDashA">📋 Dashboard Penumpang (Simulasi A)</button>
+        <button class="nav-item" id="btnDashB">🛍️ Dashboard Retail (Simulasi B)</button>
+      </div>
+      <div class="real-dashboard-loader">
+        <input type="text" id="realIframeUrl" placeholder="Masukkan URL Embed Tableau Anda...">
+        <button id="loadRealIframeBtn" class="primary-btn">Muat Real Dashboard</button>
+      </div>
+    </nav>
+
+    <!-- Main Workspace -->
+    <main class="portal-workspace">
+      
+      <!-- Left Column: Embedded Tableau Iframe Container -->
+      <section class="viz-section">
+        <div class="viz-card">
+          <div class="viz-card-header">
+            <h3 class="viz-title" id="currentVizTitle">Tableau Dashboard Embed</h3>
+            <span class="viz-badge">Tableau Iframe</span>
+          </div>
+          <div class="viz-frame-container">
+            <!-- Simulated Tableau Iframe. Inside Tableau, this iframe would point to your Tableau dashboard URL -->
+            <iframe id="tableauIframe" src="ui.html" width="100%" height="100%" frameborder="0"></iframe>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Column: Decoupled Chatbot Widget (Po'tata) -->
+      <section class="chat-section">
+        <div class="chat-widget-card">
+          
+          <!-- Chatbot Header -->
+          <header class="chat-widget-header">
+            <div class="chatbot-profile">
+              <div class="chatbot-avatar">P</div>
+              <div class="chatbot-info">
+                <h4 class="chatbot-name">Po'tata</h4>
+                <div class="chatbot-status" id="connectionStatus">
+                  <span class="status-indicator-dot red"></span>
+                  <span class="status-label-text">🔴 Menunggu Koneksi Iframe...</span>
+                </div>
+              </div>
+            </div>
+            <button id="clearChatBtn" class="clear-history-btn" title="Hapus Riwayat Obrolan">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2M10 11v6M14 11v6"/>
+              </svg>
+            </button>
+          </header>
+
+          <!-- Chat Messages Body -->
+          <div class="chat-widget-body" id="chatBody">
+            <div class="chat-scroll-container" id="chatScrollContainer">
+              <div class="chat-messages-log" id="chatMessagesLog">
+                <!-- Welcome message -->
+                <div class="chat-bubble bot-bubble">
+                  <div class="bubble-content">
+                    <p>Halo! Saya adalah <strong>Po'tata</strong>, AI Data Assistant yang terintegrasi di portal ini.</p>
+                    <p class="status-alert">Silakan tunggu hingga status indikator di atas berwarna hijau (Terkoneksi) untuk mulai bertanya tentang data dashboard ini.</p>
+                  </div>
+                  <span class="bubble-time">Sistem</span>
+                </div>
+              </div>
+
+              <!-- Typing Indicator -->
+              <div class="chat-bubble bot-bubble hidden" id="typingIndicator">
+                <div class="bubble-content typing-content">
+                  <div class="typing-animation">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Suggestions Panel -->
+          <div class="chat-widget-suggestions" id="suggestionsPanel">
+            <button class="suggest-chip-btn" data-query="Tolong ringkas seluruh data dashboard ini">📝 Ringkas Data</button>
+          </div>
+
+          <!-- Chat Input Footer -->
+          <footer class="chat-widget-footer">
+            <form id="chatForm" class="chat-input-form-box">
+              <input type="text" id="chatInput" autocomplete="off" placeholder="Silakan koneksikan data dashboard..." disabled>
+              <button type="submit" id="sendBtn" class="send-message-btn" title="Kirim" disabled>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="22" y1="2" x2="11" y2="13"></line>
+                  <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+              </button>
+            </form>
+          </footer>
+
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Parent controller script -->
+  <script src="js/parent.js"></script>
+</body>
+</html>
